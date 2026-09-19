@@ -9,7 +9,20 @@ com entrevista antes de recomendação, e termina com materiais prontos para uso
 currículo redigido, textos de LinkedIn, estrutura de portfólio e um plano de 30,
 60 e 90 dias.
 
-## Como usar
+## Comece por aqui
+
+**→ [Abrir o Consultor de Carreira](https://rojacome.github.io/Consultor-de-Carreira/)**
+
+A página tem um formulário com os campos iniciais e um botão que copia o prompt
+já preenchido. Você cola no Claude ou no ChatGPT e a conversa começa. Não precisa
+entender de GitHub, nem criar conta em nada aqui.
+
+O que você escrever no formulário não sai do seu navegador: a página é estática,
+não tem servidor, não envia dados para lugar nenhum e não usa cookies.
+
+## Como usar direto do prompt
+
+Se preferir copiar o texto na mão:
 
 1. Abra uma conversa nova em um agente de IA **com acesso a busca na web** —
    Claude, ChatGPT ou equivalente. A busca é usada na Etapa 3, para encontrar
@@ -72,6 +85,18 @@ se a área dele realmente precisa de portfólio ou site.
 - O prompt orienta a busca; ele não substitui os serviços de carreira da
   instituição de ensino, que costumam ter convênios e vagas que não aparecem em
   busca pública.
+
+## O que tem neste repositório
+
+| Arquivo | O que é |
+|---|---|
+| [`prompt.md`](prompt.md) | O prompt completo, em texto puro |
+| [`index.html`](index.html) | A página com formulário e botão de copiar, servida pelo GitHub Pages |
+| [`README.md`](README.md) | Este arquivo |
+
+A página embute uma cópia do prompt no próprio HTML, para funcionar mesmo sem
+rede. Ao editar `prompt.md`, regenere o HTML para os dois não ficarem
+dessincronizados.
 
 ## Licença
 

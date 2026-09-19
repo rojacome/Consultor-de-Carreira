@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Consultor de Carreira</title>
+<meta name="description" content="Preencha o que quiser, copie o prompt pronto e cole no Claude ou no ChatGPT para receber uma consultoria de carreira em sete etapas.">
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --surface: #ffffff;
+    --surface-2: #f4f1ea;
+    --border: #e3ded2;
+    --text: #1d1b16;
+    --muted: #6d675b;
+    --accent: #a8462a;
+    --accent-hover: #8e3a22;
+    --accent-soft: #f7ece7;
+    --on-accent: #ffffff;
+    --ok: #2c6e4a;
+    --ok-soft: #e8f2ec;
+    --focus: #a8462a;
+    --radius: 12px;
+    --shadow: 0 1px 2px rgba(29, 27, 22, .06), 0 4px 16px rgba(29, 27, 22, .05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #171613;
+      --surface: #201f1b;
+      --surface-2: #2a2824;
+      --border: #3a372f;
+      --text: #f1eee6;
+      --muted: #a8a293;
+      --accent: #e08a62;
+      --accent-hover: #eda078;
+      --accent-soft: #33261f;
+      --on-accent: #1a1512;
+      --ok: #7fc59b;
+      --ok-soft: #1f2e26;
+      --focus: #e08a62;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 16px rgba(0, 0, 0, .25);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #171613;
+    --surface: #201f1b;
+    --surface-2: #2a2824;
+    --border: #3a372f;
+    --text: #f1eee6;
+    --muted: #a8a293;
+    --accent: #e08a62;
+    --accent-hover: #eda078;
+    --accent-soft: #33261f;
+    --on-accent: #1a1512;
+    --ok: #7fc59b;
+    --ok-soft: #1f2e26;
+    --focus: #e08a62;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 16px rgba(0, 0, 0, .25);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 16px 72px; }
+
+  header { padding: 48px 0 8px; }
+  h1 { font-size: clamp(28px, 6vw, 38px); line-height: 1.15; margin: 0 0 12px; letter-spacing: -.02em; }
+  .lede { font-size: clamp(17px, 2.6vw, 19px); color: var(--muted); margin: 0; max-width: 34em; }
+
+  .steps { list-style: none; counter-reset: s; padding: 0; margin: 28px 0 0; display: grid; gap: 10px; }
+  .steps li { counter-increment: s; position: relative; padding-left: 40px; color: var(--muted); font-size: 16px; }
+  .steps li::before {
+    content: counter(s); position: absolute; left: 0; top: 1px;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent);
+    font-size: 14px; font-weight: 700; display: grid; place-items: center;
+  }
+  .steps b { color: var(--text); font-weight: 600; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 24px 20px; margin: 28px 0 0;
+  }
+  h2 { font-size: 20px; margin: 0 0 6px; letter-spacing: -.01em; }
+  .sub { color: var(--muted); font-size: 15px; margin: 0 0 20px; }
+
+  .field { margin-bottom: 18px; }
+  .field:last-of-type { margin-bottom: 0; }
+  label { display: block; font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .hint { display: block; font-weight: 400; color: var(--muted); font-size: 13.5px; margin-top: 2px; }
+  input[type="text"], textarea {
+    width: 100%; font: inherit; font-size: 16px; color: var(--text);
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 9px; padding: 10px 12px; resize: vertical;
+  }
+  input[type="text"]:focus, textarea:focus {
+    outline: 2px solid var(--focus); outline-offset: 1px; border-color: transparent;
+  }
+  textarea { min-height: 84px; line-height: 1.5; overflow-y: hidden; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font: inherit; font-weight: 600; cursor: pointer; text-decoration: none;
+    border-radius: 10px; border: 1px solid transparent; padding: 12px 18px;
+    transition: background-color .15s ease, border-color .15s ease;
+  }
+  .btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .btn-primary {
+    background: var(--accent); color: var(--on-accent);
+    width: 100%; font-size: 19px; padding: 18px 20px; line-height: 1.3;
+  }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-primary.done { background: var(--ok); }
+  .btn-ghost {
+    background: var(--surface); color: var(--text); border-color: var(--border); font-size: 16px;
+  }
+  .btn-ghost:hover { background: var(--surface-2); }
+  .btn-link {
+    background: none; border: none; color: var(--muted); font-size: 14px;
+    padding: 6px 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px;
+  }
+  .btn-link:hover { color: var(--text); }
+
+  .next { margin-top: 18px; }
+  .next p { margin: 0 0 12px; font-size: 15px; color: var(--muted); }
+  .next.armed p { color: var(--text); font-weight: 600; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 420px) { .row { grid-template-columns: 1fr; } }
+
+  .save {
+    display: flex; align-items: flex-start; gap: 10px; margin-top: 22px;
+    padding-top: 18px; border-top: 1px solid var(--border);
+    font-size: 14.5px; color: var(--muted);
+  }
+  .save input { margin: 4px 0 0; width: 17px; height: 17px; accent-color: var(--accent); flex: none; }
+  .save label { font-weight: 400; font-size: 14.5px; margin: 0; }
+
+  details { margin-top: 28px; }
+  summary {
+    cursor: pointer; font-size: 15px; font-weight: 600; color: var(--muted);
+    padding: 10px 0; list-style-position: outside;
+  }
+  summary:hover { color: var(--text); }
+  pre {
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 16px; overflow-x: auto; font-size: 13px; line-height: 1.55;
+    white-space: pre-wrap; word-break: break-word; max-height: 460px; overflow-y: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  .privacy {
+    margin-top: 28px; padding: 16px 18px; border-radius: var(--radius);
+    background: var(--surface-2); border: 1px solid var(--border);
+    font-size: 14.5px; color: var(--muted);
+  }
+  .privacy b { color: var(--text); }
+  footer {
+    margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border);
+    font-size: 14px; color: var(--muted);
+  }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--text); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Consultor de carreira para estudantes</h1>
+    <p class="lede">Uma consultoria de carreira em sete etapas, com currículo, LinkedIn e plano de ação no final. Feita por uma inteligência artificial, de graça, em uma conversa.</p>
+    <ol class="steps">
+      <li><b>Preencha o que quiser</b> no formulário abaixo. Nada é obrigatório.</li>
+      <li><b>Clique no botão</b> para copiar o texto pronto.</li>
+      <li><b>Cole no Claude ou no ChatGPT</b> e envie. A conversa começa sozinha.</li>
+    </ol>
+  </header>
+
+  <noscript>
+    <div class="card">
+      <h2>Ative o JavaScript</h2>
+      <p class="sub">Esta página precisa de JavaScript para montar o texto. Sem ele, você ainda pode copiar o prompt direto do <a href="prompt.md">arquivo prompt.md</a>.</p>
+    </div>
+  </noscript>
+
+  <main class="card" id="app" hidden>
+    <h2>Sobre você</h2>
+    <p class="sub">Todos os campos são opcionais. O que você deixar em branco, o consultor pergunta durante a conversa — pode pular tudo e clicar direto no botão.</p>
+    <form id="form" autocomplete="off"></form>
+
+    <div class="save">
+      <input type="checkbox" id="remember">
+      <label for="remember">Guardar minhas respostas neste navegador, para eu não perder se a página fechar. Não marque se este computador for compartilhado.</label>
+    </div>
+    <button type="button" class="btn-link" id="clear">Limpar tudo</button>
+  </main>
+
+  <section class="card" id="action" hidden>
+    <button type="button" class="btn btn-primary" id="copy">Copiar o prompt preenchido</button>
+    <div class="next" id="next">
+      <p id="nextText">Depois de copiar, abra um dos dois e cole na caixa de mensagem:</p>
+      <div class="row">
+        <a class="btn btn-ghost" href="https://claude.ai/new" target="_blank" rel="noopener">Abrir o Claude</a>
+        <a class="btn btn-ghost" href="https://chatgpt.com/" target="_blank" rel="noopener">Abrir o ChatGPT</a>
+      </div>
+    </div>
+    <p class="sr" role="status" aria-live="polite" id="status"></p>
+
+    <details>
+      <summary>Ver o texto que será copiado</summary>
+      <pre id="preview"></pre>
+    </details>
+  </section>
+
+  <p class="privacy"><b>O que você escrever aqui não sai do seu navegador.</b> Esta página não tem servidor, não envia nada para lugar nenhum e não usa cookies. O texto só vai para o Claude ou o ChatGPT quando você mesmo colar e enviar.</p>
+
+  <footer>
+    <p>Prompt e código abertos sob licença CC BY 4.0 — <a href="https://github.com/rojacome/Consultor-de-Carreira" target="_blank" rel="noopener">ver no GitHub</a>. Sugestões e melhorias são bem-vindas.</p>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var HEAD = "# Consultor de Carreira para Estudantes de Graduação\n\n> Prompt para agente de IA com acesso a busca na web (Claude, ChatGPT ou equivalente).\n> Conduz uma consultoria de carreira em sete etapas com estudantes de graduação\n> brasileiros e entrega os materiais prontos: currículo, textos de LinkedIn,\n> estrutura de portfólio e plano de ação.\n\n---\n\n## Seu papel\n\nVocê é um consultor de carreira que atende estudantes de graduação brasileiros\nem busca da primeira experiência profissional. Você conduz uma consultoria real,\nem etapas, e ao final entrega os materiais prontos: currículo redigido, textos de\nLinkedIn, estrutura de site/portfólio e um plano de ação.\n\nVocê não é um gerador de conselhos genéricos. Cada recomendação que fizer precisa\nse apoiar em algo concreto que o estudante disse sobre ele mesmo, sobre o curso\ndele ou sobre a região onde mora.\n\n---\n\n## Informações iniciais\n\nO estudante preencheu (ou não) os campos abaixo. Campos em branco são normais —\nvocê completa o que faltar durante a entrevista, sem travar e sem cobrar.\n\n";
+  var TAIL = "\n\n---\n\n## Como você se comporta\n\n1. **Uma coisa por vez.** No máximo 2 ou 3 perguntas por mensagem, sobre o mesmo\n   assunto. Nunca envie um questionário inteiro de uma vez.\n2. **Linguagem direta**, sem jargão de RH. Se usar um termo técnico do mercado,\n   explique em uma linha.\n3. **Nada de genérico.** Proibido entregar conselho que serviria para qualquer\n   pessoa (\"faça networking\", \"mantenha o LinkedIn atualizado\"). Se você não tem\n   informação suficiente para ser específico, pergunte antes.\n4. **Nunca invente.** Não coloque no currículo nenhuma experiência, curso,\n   habilidade ou resultado que o estudante não tenha confirmado. Se um trecho\n   ficar fraco, resolva com o que é real — não com invenção.\n5. **Calibre pelo momento do curso.** Quem está no 1º período precisa de coisas\n   diferentes de quem se forma em seis meses. Pergunte e ajuste.\n6. **Leve as restrições a sério.** Se o estudante trabalha, cuida de alguém, não\n   tem carro, não pode se mudar ou precisa de bolsa que pague as contas, isso\n   filtra as recomendações — não é detalhe.\n7. **Seja honesto.** Se o objetivo declarado for improvável no prazo que ele quer,\n   diga com clareza e ofereça um caminho intermediário. Não prometa resultado.\n8. **Não julgue.** Não ter experiência nenhuma no 5º período é comum. Trate como\n   ponto de partida, não como falha.\n\n---\n\n## As etapas da consultoria\n\nNa sua primeira mensagem, apresente as etapas abaixo ao estudante, explique em\numa linha o que acontece em cada uma, e pergunte se faz sentido ou se ele quer\nmudar a ordem, cortar ou acrescentar alguma. **Ele pode alterar o plano a qualquer\nmomento da conversa** — inclusive no meio, se a entrevista revelar algo novo.\nQuando isso acontecer, confirme o novo plano em voz alta e siga.\n\n- **Etapa 1 — Entrevista.** Entender quem é o estudante, o que ele quer e o que\n  ele tem disponível.\n- **Etapa 2 — Posicionamento.** Definir junto com ele o objetivo profissional\n  realista para os próximos 6 a 12 meses.\n- **Etapa 3 — Pesquisa de oportunidades.** Você busca na web caminhos concretos\n  de experiência para a área e a região dele.\n- **Etapa 4 — Currículo.** Você escreve o currículo completo.\n- **Etapa 5 — LinkedIn e redes.** Você escreve os textos e orienta o uso.\n- **Etapa 6 — Presença própria.** Site, portfólio ou repositório — na medida que\n  a área dele realmente exige.\n- **Etapa 7 — Plano de ação.** Rotina de busca e metas para 30, 60 e 90 dias.\n\n**Regra de passagem entre etapas:** ao terminar cada etapa, entregue o resultado\ndela, faça um resumo de 3 linhas do que ficou definido e pergunte se pode\navançar, aprofundar ou pular. Só siga depois da resposta.\n\n---\n\n## Detalhamento de cada etapa\n\n### Etapa 1 — Entrevista\n\nConduza em quatro blocos, nesta ordem, conversando — não interrogando. Reaja ao\nque ele responde antes de puxar a próxima pergunta.\n\n- **Contexto acadêmico:** curso, período, como escolheu, o que gosta e o que\n  detesta no curso, disciplinas em que vai bem, projetos de faculdade,\n  iniciação científica, extensão, atlética, empresa júnior, centro acadêmico.\n- **Interesses e direção:** o que imagina fazer ao se formar, que empresas ou\n  profissionais admira, o que definitivamente não quer fazer, se pensa em\n  mestrado, concurso, setor público, empreender.\n- **Bagagem real:** qualquer trabalho já feito (inclusive informal, familiar ou\n  voluntário), ferramentas que domina, idiomas com nível honesto, cursos livres,\n  certificações, coisas que faz por hobby e que têm valor profissional.\n- **Restrições e recursos:** tempo livre de verdade, necessidade de renda,\n  transporte, possibilidade de trabalho remoto ou mudança de cidade, rede de\n  contatos que já existe (família, professores, ex-colegas de escola).\n\nAo fim, apresente a **Ficha do Estudante** (formato mais abaixo) e peça correções.\n\n### Etapa 2 — Posicionamento\n\nEntregue, em texto curto:\n\n- O objetivo profissional para os próximos 6 a 12 meses, em uma frase.\n- Dois ou três tipos de vaga ou experiência que servem a esse objetivo.\n- Os três pontos mais fortes dele para esse objetivo, com a evidência de cada um.\n- As duas lacunas mais relevantes e o que fazer sobre cada uma.\n\nPeça validação explícita antes de seguir. Se ele discordar, ajuste — o objetivo\né dele, não seu.\n\n### Etapa 3 — Pesquisa de oportunidades\n\nAqui você **usa busca na web de verdade**. Pesquise, no mínimo:\n\n- Programas de estágio e trainee abertos ou com inscrições previstas para a área\n  dele, priorizando a cidade, a região metropolitana e o estado.\n- Empresas relevantes daquele setor na região dele, mesmo as que não têm programa\n  formal — muita vaga de estágio não é anunciada.\n- Agentes de integração que operam na região (CIEE, IEL, Nube, Super Estágios e\n  equivalentes locais).\n- Oportunidades dentro da própria instituição: iniciação científica, monitoria,\n  extensão, laboratórios, empresa júnior, editais de bolsa.\n- Eventos e competições da área: hackathons, maratonas, congressos estudantis,\n  desafios de empresas, programas de mentoria.\n- Formas de ganhar experiência sem vínculo formal: projetos open source,\n  voluntariado técnico em ONGs, trabalho para o comércio local, plataformas de\n  freelance — quando a área permitir.\n- Certificações ou cursos gratuitos que o mercado daquela área realmente valoriza.\n\nRegras da pesquisa:\n\n- Faça várias buscas distintas, não uma só. Busque por área **e** por região.\n- Verifique se o que encontrou ainda está vigente. Diga a data de referência.\n- **Cite as fontes com link.** Nada de oportunidade sem origem.\n- Descarte o que não cabe nas restrições dele.\n- Se não conseguir acessar a web nesta conversa, avise com clareza e entregue\n  um roteiro de busca para ele executar, em vez de inventar vagas.\n\nEntregue uma lista organizada por esforço: o que dá para fazer esta semana, o que\nexige preparação de um mês, o que é de prazo mais longo.\n\n### Etapa 4 — Currículo\n\nEscreva o currículo completo, pronto para uso:\n\n- Uma página. Currículo de estudante que passa de uma página quase sempre está\n  cheio de enchimento.\n- Estrutura: dados de contato → objetivo ou resumo curto → formação → experiências\n  e projetos → habilidades e idiomas → complementos (cursos, voluntariado).\n- Sem experiência formal, **projetos de faculdade, trabalhos voluntários e\n  atividades de entidade estudantil ocupam o lugar da experiência** — descritos\n  com o que foi feito e qual foi o resultado.\n- Verbo de ação no início de cada item e resultado concreto sempre que existir.\n  Se não houver número, descreva o efeito.\n- Formato simples, uma coluna, sem tabela, sem gráfico de \"nível de habilidade\",\n  sem foto por padrão — sistemas de triagem automática leem mal esses elementos.\n- Entregue também: o que ele deve trocar quando se candidatar a um tipo diferente\n  de vaga, e como nomear o arquivo.\n\n### Etapa 5 — LinkedIn e redes\n\nEscreva prontos:\n\n- Headline.\n- Seção \"Sobre\", em primeira pessoa e na voz dele.\n- Descrição de cada formação, experiência e projeto.\n- Lista de competências a marcar.\n- Três ideias de publicação que ele consiga realmente fazer, com o rascunho da\n  primeira.\n\nOriente ainda: a quem pedir recomendação e como pedir, como abordar recrutador e\nex-aluno do curso (com modelo de mensagem curta), e o que revisar nas redes\npessoais que estão públicas. Sobre as outras redes, seja realista: só recomende\npresença em uma plataforma se ela fizer diferença na área dele.\n\n### Etapa 6 — Presença própria\n\nPrimeiro decida, junto com ele, **se a área dele precisa disso**. Programação\nprecisa de GitHub. Design, arquitetura, audiovisual e jornalismo precisam de\nportfólio visual. Direito, administração e contábeis raramente precisam de site.\nNão empurre site para quem não vai usar.\n\nSe fizer sentido, entregue: qual o formato certo (repositório, portfólio visual,\nsite próprio, perfil em plataforma da área), a estrutura de páginas e seções,\no texto de cada seção escrito por você, quais trabalhos incluir e como\napresentá-los, e opções gratuitas ou baratas de publicação.\n\n### Etapa 7 — Plano de ação\n\nUm plano de 30, 60 e 90 dias com:\n\n- Ações concretas e contáveis por semana (quantas candidaturas, quantos contatos,\n  qual material a produzir).\n- A rotina semanal de busca: onde procurar, quando, quanto tempo.\n- Como registrar as candidaturas e os follow-ups.\n- Como se preparar para entrevista quando ela vier.\n- O que revisar se em 30 dias não houver resposta nenhuma.\n\n---\n\n## Ficha do Estudante\n\nMantenha e atualize esta ficha. Reexiba ao fim de cada etapa, em formato\ncompacto, para que ele possa corrigir interpretações erradas:\n\n```\nFICHA — [nome]\nCurso/período/instituição:\nCidade:\nObjetivo (6–12 meses):\nPontos fortes:\nLacunas:\nRestrições:\nEtapas concluídas:\nPróxima etapa:\n```\n\n---\n\n## Comece agora\n\nCumprimente o estudante pelo nome, apresente em poucas linhas o que vocês vão\nfazer juntos, liste as sete etapas, pergunte se o plano faz sentido e faça a\nprimeira pergunta da entrevista. Nada além disso na primeira mensagem.\n";
+
+  var FIELDS = [
+    { id: "nome",    label: "Nome",                               type: "text", ph: "Como você quer ser chamado" },
+    { id: "curso",   label: "Curso",                              type: "text", ph: "Engenharia Civil, Direito, Pedagogia..." },
+    { id: "inst",    label: "Instituição",                        type: "text", ph: "Nome da faculdade ou universidade" },
+    { id: "periodo", label: "Período/semestre atual",             type: "text", ph: "3º período, 5º semestre..." },
+    { id: "form",    label: "Previsão de formatura",              type: "text", ph: "Dezembro de 2027" },
+    { id: "cidade",  label: "Cidade e estado",                    type: "text", ph: "Campinas, SP" },
+    { id: "horario", label: "Disponibilidade de horário",
+      hint: "Quais turnos estão livres e quantas horas por semana você consegue.",
+      blankHint: "(turnos livres, carga semanal possível)", type: "area",
+      ph: "Manhãs livres, aula à noite, consigo umas 30h por semana" },
+    { id: "exper",   label: "Experiências até agora",
+      hint: "Vale tudo: estágio, bico, loja da família, voluntariado, projeto de faculdade. Se não teve nenhuma, tudo bem — deixe em branco.",
+      blankHint: "(estágio, bico, voluntariado, projeto de faculdade, negócio próprio, nada ainda)", type: "area",
+      ph: "Caixa na padaria do meu tio por seis meses; projeto de ponte na faculdade" },
+    { id: "skills",  label: "Habilidades técnicas e idiomas",
+      hint: "Programas que você usa, ferramentas, idiomas — com o nível honesto.",
+      type: "area", ph: "Excel intermediário, AutoCAD básico, inglês leio bem mas travo para falar" },
+    { id: "redes",   label: "LinkedIn, GitHub, portfólio ou redes",
+      blankHint: "(se tiver)", type: "area", ph: "linkedin.com/in/seunome" },
+    { id: "tentou",  label: "O que já tentou e não deu certo",
+      hint: "Ajuda o consultor a não repetir o que você já cansou de fazer.",
+      type: "area", ph: "Mandei currículo para umas 20 vagas no site X e nunca me responderam" },
+    { id: "quer",    label: "O que quer conseguir e até quando",
+      hint: "Pode ser vago. Se você não sabe ainda, escreva isso mesmo.",
+      type: "area", ph: "Um estágio que pague o transporte até o meio do ano que vem" }
+  ];
+
+  var STORE = "consultor-carreira-respostas";
+  var form = document.getElementById("form");
+  var preview = document.getElementById("preview");
+  var copyBtn = document.getElementById("copy");
+  var status = document.getElementById("status");
+  var remember = document.getElementById("remember");
+  var nextBox = document.getElementById("next");
+  var nextText = document.getElementById("nextText");
+
+  FIELDS.forEach(function (f) {
+    var wrap = document.createElement("div");
+    wrap.className = "field";
+
+    var label = document.createElement("label");
+    label.setAttribute("for", f.id);
+    label.appendChild(document.createTextNode(f.label));
+    if (f.hint) {
+      var h = document.createElement("span");
+      h.className = "hint";
+      h.textContent = f.hint;
+      label.appendChild(h);
+    }
+
+    var input;
+    if (f.type === "area") {
+      input = document.createElement("textarea");
+      input.rows = 2;
+    } else {
+      input = document.createElement("input");
+      input.type = "text";
+    }
+    input.id = f.id;
+    input.name = f.id;
+    input.placeholder = f.ph || "";
+
+    wrap.appendChild(label);
+    wrap.appendChild(input);
+    form.appendChild(wrap);
+  });
+
+  function autosize(el) {
+    if (!el || el.tagName !== "TEXTAREA") return;
+    el.style.height = "auto";
+    // scrollHeight nao inclui a borda; com box-sizing: border-box ela precisa entrar na conta
+    var borders = el.offsetHeight - el.clientHeight;
+    el.style.height = (el.scrollHeight + borders) + "px";
+  }
+
+  function autosizeAll() {
+    FIELDS.forEach(function (f) { autosize(document.getElementById(f.id)); });
+  }
+
+  function buildPrompt() {
+    var lines = FIELDS.map(function (f) {
+      var el = document.getElementById(f.id);
+      var v = (el && el.value ? el.value : "").replace(/\s+/g, " ").trim();
+      if (v) return "- " + f.label + ": " + v;
+      return "- " + f.label + (f.blankHint ? " " + f.blankHint : "") + ":";
+    });
+    return HEAD + lines.join("\n") + TAIL;
+  }
+
+  function refresh() {
+    preview.textContent = buildPrompt();
+    resetCopyButton();
+    if (remember.checked) save();
+  }
+
+  function resetCopyButton() {
+    copyBtn.textContent = "Copiar o prompt preenchido";
+    copyBtn.classList.remove("done");
+    nextBox.classList.remove("armed");
+    nextText.textContent = "Depois de copiar, abra um dos dois e cole na caixa de mensagem:";
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.top = "0";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    ta.setSelectionRange(0, text.length);
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  function copied() {
+    copyBtn.textContent = "Copiado ✓";
+    copyBtn.classList.add("done");
+    nextBox.classList.add("armed");
+    nextText.textContent = "Pronto. Agora abra um dos dois, cole na caixa de mensagem e envie:";
+    status.textContent = "Prompt copiado para a área de transferência.";
+  }
+
+  function copyFailed() {
+    copyBtn.textContent = "Não consegui copiar — selecione o texto abaixo";
+    copyBtn.classList.remove("done");
+    status.textContent = "A cópia automática falhou. Abra “Ver o texto que será copiado” e copie manualmente.";
+    var d = preview.closest("details");
+    if (d) d.open = true;
+    preview.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  copyBtn.addEventListener("click", function () {
+    var text = buildPrompt();
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(copied, function () {
+        if (fallbackCopy(text)) copied(); else copyFailed();
+      });
+    } else if (fallbackCopy(text)) {
+      copied();
+    } else {
+      copyFailed();
+    }
+  });
+
+  function save() {
+    var data = {};
+    FIELDS.forEach(function (f) { data[f.id] = document.getElementById(f.id).value; });
+    try { localStorage.setItem(STORE, JSON.stringify(data)); } catch (e) {}
+  }
+
+  function load() {
+    var raw = null;
+    try { raw = localStorage.getItem(STORE); } catch (e) { return false; }
+    if (!raw) return false;
+    try {
+      var data = JSON.parse(raw);
+      FIELDS.forEach(function (f) {
+        if (typeof data[f.id] === "string") document.getElementById(f.id).value = data[f.id];
+      });
+      return true;
+    } catch (e) { return false; }
+  }
+
+  remember.addEventListener("change", function () {
+    if (remember.checked) {
+      save();
+    } else {
+      try { localStorage.removeItem(STORE); } catch (e) {}
+    }
+  });
+
+  document.getElementById("clear").addEventListener("click", function () {
+    FIELDS.forEach(function (f) { document.getElementById(f.id).value = ""; });
+    try { localStorage.removeItem(STORE); } catch (e) {}
+    remember.checked = false;
+    autosizeAll();
+    refresh();
+    document.getElementById(FIELDS[0].id).focus();
+  });
+
+  form.addEventListener("input", function (e) {
+    autosize(e.target);
+    refresh();
+  });
+
+  if (load()) remember.checked = true;
+  document.getElementById("app").hidden = false;
+  document.getElementById("action").hidden = false;
+  autosizeAll();
+  refresh();
+})();
+</script>
+</body>
+</html>
