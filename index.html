@@ -133,6 +133,12 @@
   .next { margin-top: 18px; }
   .tip { margin: 12px 0 0; font-size: 14px; line-height: 1.55; color: var(--muted); }
   .tip a { color: var(--accent); }
+  .tier {
+    margin: 22px 0 0; font-size: 13px; font-weight: 700; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .btn-chip { font-size: 15px; padding: 10px 16px; flex: 0 1 auto; }
   .next p { margin: 0 0 12px; font-size: 15px; color: var(--muted); }
   .next.armed p { color: var(--text); font-weight: 600; }
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -215,7 +221,16 @@
         <a class="btn btn-ghost" href="https://gemini.google.com/app" target="_blank" rel="noopener">Gemini</a>
         <a class="btn btn-ghost" href="https://copilot.microsoft.com/" target="_blank" rel="noopener">Copilot</a>
       </div>
-      <p class="tip">Os quatro são gratuitos e pesquisam na web, que é o que a Etapa 3 precisa. Se você já usa algum, use esse — não faz muita diferença. Outra opção é o <a href="https://www.perplexity.ai/" target="_blank" rel="noopener">Perplexity</a>, que cita fontes muito bem, mas se segura pior numa conversa longa como esta.</p>
+      <p class="tip">Os quatro são gratuitos e pesquisam na web, que é o que a Etapa 3 precisa. Se você já usa algum, use esse — não faz muita diferença.</p>
+
+      <p class="tier">Outras opções</p>
+      <div class="chips">
+        <a class="btn btn-ghost btn-chip" href="https://www.perplexity.ai/" target="_blank" rel="noopener">Perplexity</a>
+        <a class="btn btn-ghost btn-chip" href="https://chat.deepseek.com/" target="_blank" rel="noopener">DeepSeek</a>
+        <a class="btn btn-ghost btn-chip" href="https://grok.com/" target="_blank" rel="noopener">Grok</a>
+        <a class="btn btn-ghost btn-chip" href="https://manus.im/" target="_blank" rel="noopener">Manus</a>
+      </div>
+      <p class="tip">Funcionam também, cada uma com um porém: o Perplexity pesquisa e cita fontes muito bem, mas se segura pior numa conversa longa como esta; no DeepSeek é preciso ligar a busca na web no botão da caixa de mensagem; o Grok gratuito só trabalha com texto; e o Manus gasta créditos a cada ação, e os gratuitos acabam rápido.</p>
     </div>
     <p class="sr" role="status" aria-live="polite" id="status"></p>
 

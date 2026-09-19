@@ -47,10 +47,17 @@ agente avisar e entregar um roteiro de busca em vez de inventar vagas.
 | [Gemini](https://gemini.google.com/app) | Gratuito, em português, só precisa de conta Google |
 | [Copilot](https://copilot.microsoft.com/) | Gratuito, busca com citação de fontes |
 | [Perplexity](https://www.perplexity.ai/) | Excelente na pesquisa da Etapa 3; menos consistente ao sustentar uma conversa longa em sete etapas |
+| [DeepSeek](https://chat.deepseek.com/) | Gratuito e sem limite declarado de mensagens; a busca na web é um botão que precisa ser ligado na caixa de mensagem |
+| [Grok](https://grok.com/) | Gratuito e independente de assinatura do X; desde março de 2026 o plano gratuito trabalha só com texto |
+| [Manus](https://manus.im/) | Agente autônomo, não um chat comum. O plano gratuito dá 300 créditos por dia mais 1.000 de boas-vindas, e cada ação consome crédito |
 
-Os quatro primeiros estão como botões na página. Todos os limites de uso
-gratuito mudam com frequência — se um deles travar no meio, dá para continuar
-em outro colando a Ficha do Estudante que o consultor mantém atualizada.
+Os quatro primeiros estão como botões principais na página; os outros quatro
+aparecem logo abaixo, em *Outras opções*, com as ressalvas de cada um.
+
+Todos os limites de uso gratuito mudam com frequência, e os dados acima são de
+setembro de 2026 — confirme na própria plataforma antes de contar com eles. Se
+uma travar no meio da consultoria, dá para continuar em outra colando a Ficha do
+Estudante que o consultor mantém atualizada.
 
 ## As sete etapas
 
