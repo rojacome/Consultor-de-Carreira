@@ -14,8 +14,8 @@ currículo redigido, textos de LinkedIn, estrutura de portfólio e um plano de 3
 **→ [Abrir o Consultor de Carreira](https://rojacome.github.io/Consultor-de-Carreira/)**
 
 A página tem um formulário com os campos iniciais e um botão que copia o prompt
-já preenchido. Você cola no Claude ou no ChatGPT e a conversa começa. Não precisa
-entender de GitHub, nem criar conta em nada aqui.
+já preenchido. Você cola no Claude, ChatGPT, Gemini ou Copilot e a conversa começa. Não
+precisa entender de GitHub, nem criar conta em nada aqui.
 
 O que você escrever no formulário não sai do seu navegador: a página é estática,
 não tem servidor, não envia dados para lugar nenhum e não usa cookies.
@@ -24,15 +24,33 @@ não tem servidor, não envia dados para lugar nenhum e não usa cookies.
 
 Se preferir copiar o texto na mão:
 
-1. Abra uma conversa nova em um agente de IA **com acesso a busca na web** —
-   Claude, ChatGPT ou equivalente. A busca é usada na Etapa 3, para encontrar
-   vagas, programas e editais reais da região do estudante.
+1. Abra uma conversa nova em um agente de IA **com acesso a busca na web**.
+   A busca é usada na Etapa 3, para encontrar vagas, programas e editais reais
+   da região do estudante. Ver *Onde usar* abaixo.
 2. Copie o conteúdo de [`prompt.md`](prompt.md) e cole como primeira mensagem.
 3. Opcionalmente, preencha os campos da seção **Informações iniciais** antes de
    enviar. Campos em branco são normais — o agente completa o que faltar durante
    a entrevista.
 4. Responda às perguntas. A consultoria avança uma etapa por vez, e você pode
    mudar a ordem, pular ou aprofundar qualquer etapa a qualquer momento.
+
+## Onde usar
+
+O prompt não depende de nenhuma plataforma específica. O único requisito real é
+busca na web, usada na Etapa 3 — e mesmo sem ela o prompt não quebra: manda o
+agente avisar e entregar um roteiro de busca em vez de inventar vagas.
+
+| Plataforma | Observação |
+|---|---|
+| [Claude](https://claude.ai/new) | Gratuito, com busca na web |
+| [ChatGPT](https://chatgpt.com/) | Gratuito, com busca na web |
+| [Gemini](https://gemini.google.com/app) | Gratuito, em português, só precisa de conta Google |
+| [Copilot](https://copilot.microsoft.com/) | Gratuito, busca com citação de fontes |
+| [Perplexity](https://www.perplexity.ai/) | Excelente na pesquisa da Etapa 3; menos consistente ao sustentar uma conversa longa em sete etapas |
+
+Os quatro primeiros estão como botões na página. Todos os limites de uso
+gratuito mudam com frequência — se um deles travar no meio, dá para continuar
+em outro colando a Ficha do Estudante que o consultor mantém atualizada.
 
 ## As sete etapas
 

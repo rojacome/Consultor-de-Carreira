@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Consultor de Carreira</title>
-<meta name="description" content="Preencha o que quiser, copie o prompt pronto e cole no Claude ou no ChatGPT para receber uma consultoria de carreira em sete etapas.">
+<meta name="description" content="Preencha o que quiser, copie o prompt pronto e cole no Claude, ChatGPT, Gemini ou Copilot para receber uma consultoria de carreira em sete etapas.">
 <style>
   :root {
     --bg: #fbfaf7;
@@ -131,6 +131,8 @@
   .btn-link:hover { color: var(--text); }
 
   .next { margin-top: 18px; }
+  .tip { margin: 12px 0 0; font-size: 14px; line-height: 1.55; color: var(--muted); }
+  .tip a { color: var(--accent); }
   .next p { margin: 0 0 12px; font-size: 15px; color: var(--muted); }
   .next.armed p { color: var(--text); font-weight: 600; }
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -180,7 +182,7 @@
     <ol class="steps">
       <li><b>Preencha o que quiser</b> no formulário abaixo. Nada é obrigatório.</li>
       <li><b>Clique no botão</b> para copiar o texto pronto.</li>
-      <li><b>Cole no Claude ou no ChatGPT</b> e envie. A conversa começa sozinha.</li>
+      <li><b>Cole em uma das IAs</b> e envie. A conversa começa sozinha.</li>
     </ol>
   </header>
 
@@ -206,11 +208,14 @@
   <section class="card" id="action" hidden>
     <button type="button" class="btn btn-primary" id="copy">Copiar o prompt preenchido</button>
     <div class="next" id="next">
-      <p id="nextText">Depois de copiar, abra um dos dois e cole na caixa de mensagem:</p>
+      <p id="nextText">Depois de copiar, abra uma destas e cole na caixa de mensagem:</p>
       <div class="row">
-        <a class="btn btn-ghost" href="https://claude.ai/new" target="_blank" rel="noopener">Abrir o Claude</a>
-        <a class="btn btn-ghost" href="https://chatgpt.com/" target="_blank" rel="noopener">Abrir o ChatGPT</a>
+        <a class="btn btn-ghost" href="https://claude.ai/new" target="_blank" rel="noopener">Claude</a>
+        <a class="btn btn-ghost" href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT</a>
+        <a class="btn btn-ghost" href="https://gemini.google.com/app" target="_blank" rel="noopener">Gemini</a>
+        <a class="btn btn-ghost" href="https://copilot.microsoft.com/" target="_blank" rel="noopener">Copilot</a>
       </div>
+      <p class="tip">Os quatro são gratuitos e pesquisam na web, que é o que a Etapa 3 precisa. Se você já usa algum, use esse — não faz muita diferença. Outra opção é o <a href="https://www.perplexity.ai/" target="_blank" rel="noopener">Perplexity</a>, que cita fontes muito bem, mas se segura pior numa conversa longa como esta.</p>
     </div>
     <p class="sr" role="status" aria-live="polite" id="status"></p>
 
@@ -220,7 +225,7 @@
     </details>
   </section>
 
-  <p class="privacy"><b>O que você escrever aqui não sai do seu navegador.</b> Esta página não tem servidor, não envia nada para lugar nenhum e não usa cookies. O texto só vai para o Claude ou o ChatGPT quando você mesmo colar e enviar.</p>
+  <p class="privacy"><b>O que você escrever aqui não sai do seu navegador.</b> Esta página não tem servidor, não envia nada para lugar nenhum e não usa cookies. O texto só vai para a IA que você escolher, quando você mesmo colar e enviar.</p>
 
   <footer>
     <p>Prompt e código abertos sob licença CC BY 4.0 — <a href="https://github.com/rojacome/Consultor-de-Carreira" target="_blank" rel="noopener">ver no GitHub</a>. Sugestões e melhorias são bem-vindas.</p>
@@ -335,7 +340,7 @@
     copyBtn.textContent = "Copiar o prompt preenchido";
     copyBtn.classList.remove("done");
     nextBox.classList.remove("armed");
-    nextText.textContent = "Depois de copiar, abra um dos dois e cole na caixa de mensagem:";
+    nextText.textContent = "Depois de copiar, abra uma destas e cole na caixa de mensagem:";
   }
 
   function fallbackCopy(text) {
@@ -358,7 +363,7 @@
     copyBtn.textContent = "Copiado ✓";
     copyBtn.classList.add("done");
     nextBox.classList.add("armed");
-    nextText.textContent = "Pronto. Agora abra um dos dois, cole na caixa de mensagem e envie:";
+    nextText.textContent = "Pronto. Agora abra uma destas, cole na caixa de mensagem e envie:";
     status.textContent = "Prompt copiado para a área de transferência.";
   }
 
